@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.raymondtz65.prolificlibrary.library.BookList" >
     
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_add"
+        android:title="@string/add"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:showAsAction="never" />
+    <item android:id="@+id/action_seed"
+        android:title="@string/seed"
+        android:orderInCategory="100"
+        android:showAsAction="never"/>
 </menu>
