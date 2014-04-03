@@ -8,13 +8,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.raymondtz65.prolificlibrary.library.BookList"
+            android:name="com.raymondtz65.prolificlibrary.library.BookListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.raymondtz65.prolificlibrary.library.AddBookActivity"
+            android:label="@string/title_activity_add_book" >
         </activity>
     </application>
 

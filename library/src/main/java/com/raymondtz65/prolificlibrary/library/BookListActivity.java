@@ -1,12 +1,13 @@
 package com.raymondtz65.prolificlibrary.library;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class BookList extends ActionBarActivity {
+public class BookListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class BookList extends ActionBarActivity {
         
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.book_list, menu);
+
         return true;
     }
 
@@ -30,7 +32,12 @@ public class BookList extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
+            Intent intent = new Intent(this, AddBookActivity.class);
+            startActivity(intent);
             return true;
+        }
+        else if(id==R.id.action_seed) {
+
         }
         return super.onOptionsItemSelected(item);
     }
