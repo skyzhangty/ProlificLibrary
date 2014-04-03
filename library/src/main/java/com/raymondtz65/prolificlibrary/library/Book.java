@@ -22,4 +22,8 @@ public class Book {
         this.url = url;
     }
 
+    public String getAuthor() {
+        return this.author;
+    }
+
 }
