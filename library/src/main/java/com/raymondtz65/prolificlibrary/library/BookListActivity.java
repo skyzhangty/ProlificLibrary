@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class BookListActivity extends ActionBarActivity {
@@ -37,9 +41,26 @@ public class BookListActivity extends ActionBarActivity {
             return true;
         }
         else if(id==R.id.action_seed) {
-
+            readSeedJsonFile();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void readSeedJsonFile() {
+        String json = null;
+
+        try {
+            InputStream is = getAssets().open("seeds.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer,"UTF-8");
+
+            Toast.makeText(this,json,Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
