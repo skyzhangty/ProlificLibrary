@@ -31,7 +31,9 @@ public class APIClient {
 
     public BackgroundService.LibraryClient getClient(Context context, Class<BackgroundService.LibraryClient>clientClass) {
         if(mRestAdapter==null) {
+
             mRestAdapter = new RestAdapter.Builder().setEndpoint(mBaseURL).build();
+
         }
         BackgroundService.LibraryClient libraryClient = mClients.get(clientClass.getCanonicalName());
 
@@ -43,4 +45,5 @@ public class APIClient {
         return libraryClient;
 
     }
+
 }

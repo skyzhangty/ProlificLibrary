@@ -41,7 +41,7 @@ public class BookListActivity extends ActionBarActivity {
             Intent intent = new Intent(this,BackgroundService.class);
             intent.setAction(SEED_ACTION);
             startService(intent);
-
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
