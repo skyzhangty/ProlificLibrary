@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -27,6 +28,11 @@
             android:name="com.raymondtz65.prolificlibrary.library.BackgroundService"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name="com.raymondtz65.prolificlibrary.library.BookDetailActivity"
+            android:label="@string/title_activity_book_detail" >
+        </activity>
     </application>
 
 </manifest>

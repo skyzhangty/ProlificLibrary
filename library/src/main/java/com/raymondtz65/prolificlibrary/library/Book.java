@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by skyzhangty on 4/2/14.
  */
 public class Book {
-    int id;
+    long id;
     String author;
     String categories;
 
@@ -35,7 +35,7 @@ public class Book {
     public String getLastCheckedOutBy() {return this.lastCheckedOutBy;}
     public String getPublisher() {return this.publisher;}
     public String getTitle() {return this.title;}
-
+    public long getId() {return this.id;}
 
     public String toString() {
         return "author="+author+" "+"categories="+categories+" "+"lastCheckedOut="+lastCheckedOut+" "+"lastCheckedOutBy="+lastCheckedOutBy+" publisher="+publisher+" title="+title;

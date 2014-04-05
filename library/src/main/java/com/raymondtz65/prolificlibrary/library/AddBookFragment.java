@@ -2,7 +2,10 @@ package com.raymondtz65.prolificlibrary.library;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -74,22 +77,26 @@ public class AddBookFragment extends Fragment {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 }
+                else if(networkConnected()) {
+                    Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
+                }
                 else {
                     libraryClient.addOneBookAsync(author, categories, null, null, publisher, title,
-                            new Callback<BookResponse>() {
-                                @Override
-                                public void success(BookResponse bookResponse, Response response) {
-                                    getActivity().finish();
-                                }
-
-                                @Override
-                                public void failure(RetrofitError retrofitError) {
-                                    Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
-                                }
+                        new Callback<BookResponse>() {
+                            @Override
+                            public void success(BookResponse bookResponse, Response response) {
+                                getActivity().finish();
                             }
+
+                            @Override
+                            public void failure(RetrofitError retrofitError) {
+                                Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
                     );
                 }
             }
+
         });
         return view;
     }
@@ -117,5 +124,10 @@ public class AddBookFragment extends Fragment {
         return TextUtils.isEmpty(inputs);
     }
 
+    private boolean networkConnected() {
+        ConnectivityManager cm = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork!=null && activeNetwork.isConnected());
+    }
 
 }

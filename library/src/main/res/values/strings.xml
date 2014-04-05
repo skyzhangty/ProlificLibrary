@@ -22,4 +22,6 @@
     <string name="leave_unsaved_changes">Leave with unsaved changes?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="title_activity_book_detail">BookDetailActivity</string>
+    <string name="check_out">Checkout</string>
 </resources>

@@ -24,6 +24,8 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
 
     private static final String SEED_ACTION = "SEED";
     private static final String BROADCAST_ACTION = "UPDATE_UI";
+    private static final String BOOK_ID="BOOK_ID";
+
     private LibraryClient mLibraryClient = null;
     private ProgressBar mBookListProgressBar = null;
 
@@ -115,8 +117,10 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     }
 
     @Override
-    public void onListItemClicked() {
-
+    public void onListItemClicked(long bookID) {
+        Intent intent = new Intent(this, BookDetailActivity.class);
+        intent.putExtra(BOOK_ID,bookID);
+        startActivity(intent);
     }
 
     private boolean networkConnected() {

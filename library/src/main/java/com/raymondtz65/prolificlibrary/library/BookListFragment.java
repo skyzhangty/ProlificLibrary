@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -46,6 +47,14 @@ public class BookListFragment extends Fragment {
         mListView = (ListView)view.findViewById(R.id.bookListView);
         mAdapter = new SimpleBookAdapter(getActivity().getApplicationContext(),mBookList);
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                long bookID = mBookList.get(position).getId();
+                mListener.onListItemClicked(bookID);
+            }
+        });
         return view;
     }
 
@@ -84,7 +93,7 @@ public class BookListFragment extends Fragment {
      */
     public interface OnListItemClickedListener {
         // TODO: Update argument type and name
-        public void onListItemClicked();
+        public void onListItemClicked(long bookID);
     }
 
 }
