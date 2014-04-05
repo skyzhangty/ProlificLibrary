@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ public class BookListFragment extends Fragment {
 
     private OnListItemClickedListener mListener;
 
-    private List<Book> mBookList = null;
+    private List<Book> mBookList = new ArrayList<Book>();
     private ListView mListView = null;
     private SimpleBookAdapter mAdapter = null;
 
@@ -68,6 +69,7 @@ public class BookListFragment extends Fragment {
 
     public void updateUI(List<Book> bookList) {
         mBookList = bookList;
+
         mAdapter.notifyDataSetChanged();
     }
     /**

@@ -1,6 +1,8 @@
 package com.raymondtz65.prolificlibrary.library;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,8 @@ public class SimpleBookAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(mBookList==null) return 0;
+        Log.v("fuck", mBookList.size()+"");
         return mBookList.size();
     }
 
@@ -40,6 +44,8 @@ public class SimpleBookAdapter extends BaseAdapter {
 
         titleTextView.setText( ((Book)getItem(position)).getTitle() );
         authorTextView.setText( ((Book)getItem(position)).getAuthor() );
+        titleTextView.setTextColor(Color.BLACK);
+        authorTextView.setTextColor(Color.BLACK);
         return convertView;
     }
 
