@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by skyzhangty on 4/2/14.
  */
 public class Book {
-
+    int id;
     String author;
     String categories;
 
@@ -15,7 +15,7 @@ public class Book {
 
     String publisher;
     String title;
-    //String url;
+    String url;
 
     public Book(String author,String categories,Date lastCheckedOut,String lastCheckedOutBy,String publisher,String title) {
         this.author = author;

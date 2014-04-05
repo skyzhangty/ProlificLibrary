@@ -17,7 +17,7 @@ public class APIClient {
     private RestAdapter mRestAdapter=null;
     private String mBaseURL = SERVER_URL;
 
-    private Map<String, BackgroundService.LibraryClient> mClients = new HashMap<String,BackgroundService.LibraryClient>();
+    private Map<String, LibraryClient> mClients = new HashMap<String,LibraryClient>();
     private APIClient() {
 
     }
@@ -29,13 +29,13 @@ public class APIClient {
         return instance;
     }
 
-    public BackgroundService.LibraryClient getClient(Context context, Class<BackgroundService.LibraryClient>clientClass) {
+    public LibraryClient getClient(Context context, Class<LibraryClient>clientClass) {
         if(mRestAdapter==null) {
 
             mRestAdapter = new RestAdapter.Builder().setEndpoint(mBaseURL).build();
 
         }
-        BackgroundService.LibraryClient libraryClient = mClients.get(clientClass.getCanonicalName());
+        LibraryClient libraryClient = mClients.get(clientClass.getCanonicalName());
 
         if(libraryClient!=null) {
             return libraryClient;
