@@ -4,11 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -34,6 +37,12 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalBroadcastReceiver,new IntentFilter(BROADCAST_ACTION));
+        if(!networkConnected()) {
+            Toast.makeText(this,getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
+        }
+        else {
+            getBookList();
+        }
     }
 
     @Override
@@ -86,7 +95,10 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         mLibraryClient.getAllBooksAsync(new Callback<BookListResponse>() {
             @Override
             public void success(BookListResponse bookListResponse, Response response) {
-                ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment)).updateUI(bookListResponse.getBooks());
+                BookListFragment bookListFragment = ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment));
+                if(bookListFragment!=null) {
+                    bookListFragment.updateUI(bookListResponse.getBooks());
+                }
             }
 
             @Override
@@ -99,5 +111,11 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     @Override
     public void onListItemClicked() {
 
+    }
+
+    private boolean networkConnected() {
+        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork!=null && activeNetwork.isConnected());
     }
 }

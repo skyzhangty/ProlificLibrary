@@ -69,7 +69,7 @@ public class BookListFragment extends Fragment {
 
     public void updateUI(List<Book> bookList) {
         mBookList = bookList;
-
+        mAdapter.setList(mBookList);
         mAdapter.notifyDataSetChanged();
     }
     /**
