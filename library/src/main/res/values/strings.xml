@@ -17,6 +17,9 @@
     <string name="no_network">No network connection!</string>
     <string name="detail">Detail</string>
     <string name="action_done">Done</string>
-    <string name="all_required">All Fields Are Required!</string>
+    <string name="all_required">All fields are required!</string>
     <string name="ok">OK</string>
+    <string name="leave_unsaved_changes">Leave with unsaved changes?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

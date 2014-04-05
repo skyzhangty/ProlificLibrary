@@ -59,14 +59,14 @@ public class AddBookActivity extends ActionBarActivity {
         else {
             //The user input something. Pop up the alert dialog
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage(getString(R.string.leave_with_unsaved));
-            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setMessage(getResources().getString(R.string.leave_unsaved_changes));
+            alertDialogBuilder.setPositiveButton(getResources().getString(R.string.yes),new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     finish();
                 }
             });
-            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
