@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by skyzhangty on 4/5/14.
  */
-public class SimpleBookAdapter extends BaseAdapter {
+public class SimpleBookAdapter extends ArrayAdapter<Book> {
     private Context mContext;
     private List<Book> mBookList = new ArrayList<Book>();
     private LayoutInflater mInflater=null;
