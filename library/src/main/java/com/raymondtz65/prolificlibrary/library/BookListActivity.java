@@ -11,6 +11,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import retrofit.Callback;
@@ -23,12 +25,13 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     private static final String SEED_ACTION = "SEED";
     private static final String BROADCAST_ACTION = "UPDATE_UI";
     private LibraryClient mLibraryClient = null;
-
+    private ProgressBar mBookListProgressBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
+        mBookListProgressBar = (ProgressBar)findViewById(R.id.bookListProcessBar);
 
         mLibraryClient = APIClient.getInstance().getClient(getApplicationContext(), LibraryClient.class);
     }
@@ -72,6 +75,7 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
             return true;
         }
         else if(id==R.id.action_seed) {
+            mBookListProgressBar.setVisibility(View.VISIBLE);
             Intent intent = new Intent(this, BackgroundService.class);
             intent.setAction(SEED_ACTION);
             startService(intent);
@@ -92,12 +96,14 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     };
 
     private void getBookList() {
+        mBookListProgressBar.setVisibility(View.VISIBLE);
         mLibraryClient.getAllBooksAsync(new Callback<BookListResponse>() {
             @Override
             public void success(BookListResponse bookListResponse, Response response) {
                 BookListFragment bookListFragment = ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment));
                 if(bookListFragment!=null) {
                     bookListFragment.updateUI(bookListResponse.getBooks());
+                    mBookListProgressBar.setVisibility(View.INVISIBLE);
                 }
             }
 

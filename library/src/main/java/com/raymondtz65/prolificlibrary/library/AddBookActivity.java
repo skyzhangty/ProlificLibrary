@@ -15,6 +15,8 @@ public class AddBookActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -32,7 +34,8 @@ public class AddBookActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if(id==android.R.id.home || id==R.id.action_done) {
+            onExit();
             return true;
         }
         return super.onOptionsItemSelected(item);

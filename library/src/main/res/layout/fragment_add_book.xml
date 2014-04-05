@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/submitBtn"
         android:text="@string/submit"
+
         />
 
 </LinearLayout>

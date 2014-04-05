@@ -12,5 +12,12 @@
         android:id="@+id/bookListView">
 
     </ListView>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bookListProcessBar"
+        android:visibility="invisible"
+        android:layout_gravity="center_horizontal|center_vertical"
+        />
 
 </FrameLayout>

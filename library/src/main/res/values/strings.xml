@@ -15,4 +15,8 @@
     <string name="submit">Submit</string>
     <string name="leave_with_unsaved">Leave with unsaved changes?</string>
     <string name="no_network">No network connection!</string>
+    <string name="detail">Detail</string>
+    <string name="action_done">Done</string>
+    <string name="all_required">All Fields Are Required!</string>
+    <string name="ok">OK</string>
 </resources>

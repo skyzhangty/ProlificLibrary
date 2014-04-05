@@ -1,55 +1,34 @@
 package com.raymondtz65.prolificlibrary.library;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddBookFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddBookFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class AddBookFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
 
     private EditText mBookTitleEditText;
     private EditText mAuthorEditText;
     private EditText mPublisherEditText;
     private EditText mCategoriesEditText;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddBookFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    private Button mSubmitButton;
+
     public static AddBookFragment newInstance(String param1, String param2) {
         AddBookFragment fragment = new AddBookFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
     public AddBookFragment() {
@@ -59,10 +38,7 @@ public class AddBookFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -74,6 +50,47 @@ public class AddBookFragment extends Fragment {
         mAuthorEditText = (EditText)view.findViewById(R.id.authorEditText);
         mPublisherEditText = (EditText)view.findViewById(R.id.publisherEditText);
         mCategoriesEditText = (EditText)view.findViewById(R.id.categoriesEditText);
+        mSubmitButton = (Button)view.findViewById(R.id.submitBtn);
+
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LibraryClient libraryClient = APIClient.getInstance().getClient(getActivity().getApplicationContext(),LibraryClient.class);
+                String title = mBookTitleEditText.getText().toString();
+                String author = mAuthorEditText.getText().toString();
+                String publisher = mPublisherEditText.getText().toString();
+                String categories = mCategoriesEditText.getText().toString();
+
+                if(TextUtils.isEmpty(title) || TextUtils.isEmpty(author) || TextUtils.isEmpty(publisher) || TextUtils.isEmpty(categories)) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getResources().getString(R.string.all_required));
+                    alertDialogBuilder.setCancelable(true);
+                    alertDialogBuilder.setNeutralButton(getResources().getString(R.string.ok),new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+                else {
+                    libraryClient.addOneBookAsync(author, categories, null, null, publisher, title,
+                            new Callback<BookResponse>() {
+                                @Override
+                                public void success(BookResponse bookResponse, Response response) {
+                                    getActivity().finish();
+                                }
+
+                                @Override
+                                public void failure(RetrofitError retrofitError) {
+                                    Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    );
+                }
+            }
+        });
         return view;
     }
 
@@ -87,6 +104,7 @@ public class AddBookFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
 
     public boolean inputsEmpty() {
         String bookTitle = mBookTitleEditText.getText().toString();
