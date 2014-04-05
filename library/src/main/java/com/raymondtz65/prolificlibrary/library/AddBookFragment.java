@@ -77,7 +77,7 @@ public class AddBookFragment extends Fragment {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 }
-                else if(networkConnected()) {
+                else if(!networkConnected()) {
                     Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
                 }
                 else {
