@@ -21,25 +21,19 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     private static final String BOOK_ID="BOOK_ID";
     private static final String SEED_STATUS = "SEED_STATUS";
 
-    private ProgressBar mBookListProgressBar = null;
-
+    private BookListFragment mBookListFragment = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
-        mBookListProgressBar = (ProgressBar)findViewById(R.id.bookListProcessBar);
+
+        mBookListFragment = (BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalBroadcastReceiver,new IntentFilter(BROADCAST_ACTION));
-
-        BookListFragment bookListFragment = (BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
-        if(bookListFragment!=null) {
-            bookListFragment.getBookList();
-        }
-
     }
 
     @Override
@@ -69,7 +63,7 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
             return true;
         }
         else if(id==R.id.action_seed) {
-            mBookListProgressBar.setVisibility(View.VISIBLE);
+            ((ProgressBar)mBookListFragment.getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.VISIBLE);
             Intent intent = new Intent(this, BackgroundService.class);
             intent.setAction(SEED_ACTION);
             startService(intent);
@@ -86,13 +80,12 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
             if(intent.getAction().equals(BROADCAST_ACTION)) {
                 String seed_status = intent.getStringExtra(SEED_STATUS);
                 if(seed_status.equals(getResources().getString(R.string.success))) {
-                    BookListFragment bookListFragment = (BookListFragment) getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
-                    if (bookListFragment != null) {
-                        bookListFragment.getBookList();
+                    if (mBookListFragment != null) {
+                        mBookListFragment.getBookList();
                     }
                 }
                 else {
-                    mBookListProgressBar.setVisibility(View.INVISIBLE);
+                    ((ProgressBar)mBookListFragment.getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.INVISIBLE);
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.fail),Toast.LENGTH_LONG).show();
                 }
             }

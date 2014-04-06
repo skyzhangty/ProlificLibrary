@@ -35,4 +35,8 @@
     <string name="by">&#160;by&#160;</string>
     <string name="fail">Fail to seed the database!</string>
     <string name="success">Success</string>
+    <string name="addbooksucess">One book added</string>
+    <string name="addbookfail">Fail to add one book!</string>
+    <string name="checkoutfail">Fail to check out the book!</string>
+    <string name="nobook">No book to display!</string>
 </resources>

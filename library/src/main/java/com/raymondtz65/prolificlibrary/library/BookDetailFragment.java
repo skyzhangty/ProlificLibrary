@@ -153,7 +153,7 @@ public class BookDetailFragment extends Fragment {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-                    Toast.makeText(getActivity().getApplicationContext(),retrofitError.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.checkoutfail),Toast.LENGTH_LONG).show();
                 }
             });
         }

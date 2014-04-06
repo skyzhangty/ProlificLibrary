@@ -85,12 +85,17 @@ public class AddBookFragment extends Fragment {
                         new Callback<BookResponse>() {
                             @Override
                             public void success(BookResponse bookResponse, Response response) {
-                                getActivity().finish();
+                                mBookTitleEditText.setText("");
+                                mAuthorEditText.setText("");
+                                mPublisherEditText.setText("");
+                                mCategoriesEditText.setText("");
+                                mBookTitleEditText.requestFocus();
+                                Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.addbooksucess),Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void failure(RetrofitError retrofitError) {
-                                Toast.makeText(getActivity().getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.addbookfail), Toast.LENGTH_LONG).show();
                             }
                         }
                     );

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class BookListFragment extends Fragment {
 
     private List<Book> mBookList = new ArrayList<Book>();
     private ListView mListView = null;
+    private ProgressBar mProgressBar = null;
+    private TextView mEmptyListTextView = null;
     private SimpleBookAdapter mAdapter = null;
 
 
@@ -52,6 +55,8 @@ public class BookListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.bookListProcessBar);
+        mEmptyListTextView = (TextView)view.findViewById(R.id.listemptyTextView);
         mListView = (ListView)view.findViewById(R.id.bookListView);
         mAdapter = new SimpleBookAdapter(getActivity().getApplicationContext(),mBookList);
         mListView.setAdapter(mAdapter);
@@ -66,6 +71,11 @@ public class BookListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getBookList();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -85,9 +95,9 @@ public class BookListFragment extends Fragment {
     }
 
     public void getBookList() {
-        ((ProgressBar)getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
         if(!networkConnected()) {
-            ((ProgressBar)getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.no_network), Toast.LENGTH_LONG).show();
         }
         else {
@@ -96,7 +106,7 @@ public class BookListFragment extends Fragment {
                 @Override
                 public void success(BookListResponse bookListResponse, Response response) {
                     updateUI(bookListResponse.getBooks());
-                    ((ProgressBar) getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.INVISIBLE);
+                    mProgressBar.setVisibility(View.INVISIBLE);
 
                 }
 
@@ -111,6 +121,13 @@ public class BookListFragment extends Fragment {
         mBookList = bookList;
         mAdapter.setList(mBookList);
         mAdapter.notifyDataSetChanged();
+
+        if(bookList.size()==0) {
+            mEmptyListTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mEmptyListTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private boolean networkConnected() {
