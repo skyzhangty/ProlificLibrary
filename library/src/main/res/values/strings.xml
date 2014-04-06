@@ -24,10 +24,13 @@
     <string name="no">No</string>
     <string name="title_activity_book_detail">BookDetailActivity</string>
     <string name="check_out">Checkout</string>
-    <string name="tags_detail">Tags: </string>
-    <string name="publisher_detail">Publisher: </string>
+    <string name="tags_detail">Tags:&#160;</string>
+    <string name="publisher_detail">Publisher:&#160;</string>
     <string name="checkedout_detail">Last Checked Out By:</string>
     <string name="checkout_name">Your Name</string>
     <string name="enter_name">Please enter your name</string>
     <string name="cancel">Cancel</string>
+    <string name="share">Share</string>
+    <string name="viewingbook">I am viewing the book:&#160;</string>
+    <string name="by">&#160;by&#160;</string>
 </resources>

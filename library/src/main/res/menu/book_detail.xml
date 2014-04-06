@@ -3,5 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.raymondtz65.prolificlibrary.library.BookDetailActivity" >
     
-
+    <item
+        android:id="@+id/action_share"
+        app:showAsAction="always"
+        android:orderInCategory="100"
+        android:title="@string/share"
+        android:icon="@drawable/ic_action_share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        />
 </menu>

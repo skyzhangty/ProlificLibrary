@@ -36,6 +36,8 @@ public class BookDetailFragment extends Fragment {
 
     private Book mBook = null;
 
+    private OnBookUpdated mListener;
+
     public static BookDetailFragment newInstance() {
         BookDetailFragment fragment = new BookDetailFragment();
 
@@ -86,6 +88,7 @@ public class BookDetailFragment extends Fragment {
                                     mBook=bookResponse.getBook();
                                     if(mBook!=null) {
                                         showBookDetail(mBook.getId());
+                                        mListener.onBookUpdated(mBook);
                                     }
                                 }
 
@@ -116,13 +119,19 @@ public class BookDetailFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+            mListener = (OnBookUpdated) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
 
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
+        mListener = null;
     }
 
     public void showBookDetail(long bookID) {
@@ -138,6 +147,7 @@ public class BookDetailFragment extends Fragment {
                     mBook = bookResponse.getBook();
                     if(mBook!=null) {
                         updateUI(mBook);
+                        mListener.onBookUpdated(mBook);
                     }
                 }
 
@@ -175,5 +185,10 @@ public class BookDetailFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return (activeNetwork!=null && activeNetwork.isConnected());
+    }
+
+
+    interface OnBookUpdated {
+        public void onBookUpdated(Book book);
     }
 }
