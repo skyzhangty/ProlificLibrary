@@ -9,6 +9,7 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.Path;
 
 /**
  * Created by skyzhangty on 4/4/14.
@@ -43,4 +44,10 @@ public interface LibraryClient {
     @POST("/books")
     BookResponse addOneBook(@Field("author") String author, @Field("categories") String categories, @Field("lastCheckedOut") Date lastCheckedOut,
                          @Field("lastCheckedOutBy") String lastCheckedOutBy, @Field("publisher") String publisher, @Field("title") String title);
+
+    @GET("/books/{id}")
+    void getOneBookAsync(@Path("id") long bookID, Callback<BookResponse> cb);
+
+    @GET("/books/{id}")
+    BookResponse getOneBook(@Path("id") long bookID);
 }

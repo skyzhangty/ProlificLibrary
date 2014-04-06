@@ -1,17 +1,26 @@
 package com.raymondtz65.prolificlibrary.library;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class BookDetailActivity extends ActionBarActivity {
 
+    private static final String BOOK_ID="BOOK_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
+
+        Intent intent = getIntent();
+        BookDetailFragment bookDetailFragment = (BookDetailFragment)getSupportFragmentManager().findFragmentById(R.id.bookdetailfragment);
+        if(bookDetailFragment!=null) {
+            bookDetailFragment.showBookDetail(intent.getLongExtra(BOOK_ID,0));
+        }
     }
 
 

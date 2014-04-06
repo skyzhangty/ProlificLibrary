@@ -8,25 +8,31 @@
    <TextView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:id="@+id/titleTextView"/>
+       android:id="@+id/titleTextView"
+       android:textSize="30sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/authorTextView"/>
+        android:id="@+id/authorTextView"
+        android:textSize="20sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/publisherTextView"/>
+        android:id="@+id/publisherTextView"
+        android:textSize="15sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/categoriesTextView"/>
+        android:id="@+id/categoriesTextView"
+        android:textSize="15sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lastCheckedOutTextView"/>
+        android:id="@+id/lastCheckedOutTextView"
+        android:textSize="15sp"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/check_out"/>
+        android:text="@string/check_out"
+        android:id="@+id/checkoutButton"/>
 </LinearLayout>

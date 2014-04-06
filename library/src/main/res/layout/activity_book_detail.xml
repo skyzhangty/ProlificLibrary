@@ -11,6 +11,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.raymondtz65.prolificlibrary.library.BookDetailFragment"/>
+        android:name="com.raymondtz65.prolificlibrary.library.BookDetailFragment"
+        android:id="@+id/bookdetailfragment"/>
 
 </RelativeLayout>

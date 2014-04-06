@@ -24,4 +24,7 @@
     <string name="no">No</string>
     <string name="title_activity_book_detail">BookDetailActivity</string>
     <string name="check_out">Checkout</string>
+    <string name="tags_detail">Tags: </string>
+    <string name="publisher_detail">Publisher: </string>
+    <string name="checkedout_detail">Last Checked Out By:</string>
 </resources>
