@@ -33,4 +33,6 @@
     <string name="share">Share</string>
     <string name="viewingbook">I am viewing the book:&#160;</string>
     <string name="by">&#160;by&#160;</string>
+    <string name="fail">Fail to seed the database!</string>
+    <string name="success">Success</string>
 </resources>

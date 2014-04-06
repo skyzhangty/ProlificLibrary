@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 
 public class BookListActivity extends ActionBarActivity implements BookListFragment.OnListItemClickedListener {
@@ -18,6 +19,7 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     private static final String SEED_ACTION = "SEED";
     private static final String BROADCAST_ACTION = "UPDATE_UI";
     private static final String BOOK_ID="BOOK_ID";
+    private static final String SEED_STATUS = "SEED_STATUS";
 
     private ProgressBar mBookListProgressBar = null;
 
@@ -82,9 +84,16 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(BROADCAST_ACTION)) {
-                BookListFragment bookListFragment = (BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
-                if(bookListFragment!=null) {
-                    bookListFragment.getBookList();
+                String seed_status = intent.getStringExtra(SEED_STATUS);
+                if(seed_status.equals(getResources().getString(R.string.success))) {
+                    BookListFragment bookListFragment = (BookListFragment) getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
+                    if (bookListFragment != null) {
+                        bookListFragment.getBookList();
+                    }
+                }
+                else {
+                    mBookListProgressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.fail),Toast.LENGTH_LONG).show();
                 }
             }
         }

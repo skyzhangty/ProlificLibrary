@@ -22,7 +22,7 @@ public interface LibraryClient {
     void deleteAllAsync(Callback<BookListResponse> cb);
 
     @Headers("Accept: application/json")
-    @DELETE("/clean")
+    @DELETE("/clea")
     BookListResponse deleteAll();
 
     @Headers("Accept: application/json")

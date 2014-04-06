@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 
+import retrofit.RetrofitError;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -20,6 +22,9 @@ public class BackgroundService extends IntentService {
 
     private static final String SEED_ACTION = "SEED";
     private static final String BROADCAST_ACTION = "UPDATE_UI";
+    private static final String SEED_STATUS = "SEED_STATUS";
+    private Intent mLocalBroadcastIntent = new Intent(BROADCAST_ACTION);
+
     public BackgroundService() {
         super("BackgroundService");
     }
@@ -32,7 +37,14 @@ public class BackgroundService extends IntentService {
                 LibraryClient libraryClient = APIClient.getInstance().getClient(getApplicationContext(),LibraryClient.class);
 
                 //Delete everything in the database
-                libraryClient.deleteAll();
+                try {
+                    libraryClient.deleteAll();
+                }
+                catch (RetrofitError e) {
+                    mLocalBroadcastIntent.putExtra(SEED_STATUS,getResources().getString(R.string.fail));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(mLocalBroadcastIntent);
+                    return;
+                }
 
                 //Read seeds.json
                 Gson gson = new Gson();
@@ -41,12 +53,19 @@ public class BackgroundService extends IntentService {
                 //Seed database
                 for(int i=0;i<seedsBooks.length;i++) {
                     Book book = seedsBooks[i];
-                    libraryClient.addOneBook(book.getAuthor(),book.getCategories(),book.getLastCheckedOut(),book.getLastCheckedOutBy(),book.getPublisher(),book.getTitle());
+                    try {
+                        libraryClient.addOneBook(book.getAuthor(), book.getCategories(), book.getLastCheckedOut(), book.getLastCheckedOutBy(), book.getPublisher(), book.getTitle());
+                    }
+                    catch (RetrofitError e) {
+                        mLocalBroadcastIntent.putExtra(SEED_STATUS,getResources().getString(R.string.fail));
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(mLocalBroadcastIntent);
+                        return;
+                    }
                 }
 
                 //Done seeding and notify the activity
-                Intent localBroadcastIntent = new Intent(BROADCAST_ACTION);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(localBroadcastIntent);
+                mLocalBroadcastIntent.putExtra(SEED_STATUS,getResources().getString(R.string.success));
+                LocalBroadcastManager.getInstance(this).sendBroadcast(mLocalBroadcastIntent);
             }
         }
     }
