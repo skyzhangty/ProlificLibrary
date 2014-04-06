@@ -1,6 +1,9 @@
 package com.raymondtz65.prolificlibrary.library;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,10 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class BookListFragment extends Fragment {
@@ -76,10 +84,39 @@ public class BookListFragment extends Fragment {
         mListener = null;
     }
 
+    public void getBookList() {
+        ((ProgressBar)getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.VISIBLE);
+        if(!networkConnected()) {
+            ((ProgressBar)getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.INVISIBLE);
+            Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.no_network), Toast.LENGTH_LONG).show();
+        }
+        else {
+            LibraryClient libraryClient = APIClient.getInstance().getClient(getActivity().getApplicationContext(),LibraryClient.class);
+            libraryClient.getAllBooksAsync(new Callback<BookListResponse>() {
+                @Override
+                public void success(BookListResponse bookListResponse, Response response) {
+                    updateUI(bookListResponse.getBooks());
+                    ((ProgressBar) getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.INVISIBLE);
+
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    Toast.makeText(getActivity().getApplicationContext(),retrofitError.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
     public void updateUI(List<Book> bookList) {
         mBookList = bookList;
         mAdapter.setList(mBookList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private boolean networkConnected() {
+        ConnectivityManager cm = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork!=null && activeNetwork.isConnected());
     }
     /**
      * This interface must be implemented by activities that contain this

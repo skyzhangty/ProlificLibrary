@@ -9,7 +9,9 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Created by skyzhangty on 4/4/14.
@@ -29,7 +31,7 @@ public interface LibraryClient {
 
     @Headers("Accept: application/json")
     @GET("/books")
-    BookListResponse getAllBooks();
+    BookListResponse getAllBooks(@Query("sort")String sort);
 
 
     @FormUrlEncoded
@@ -50,4 +52,12 @@ public interface LibraryClient {
 
     @GET("/books/{id}")
     BookResponse getOneBook(@Path("id") long bookID);
+
+    @FormUrlEncoded
+    @PUT("/books/{id}")
+    void updateOneBookAsync(@Path("id") long bookID, @Field("lastCheckedOut") Date lastCheckedOut, @Field("lastCheckedOutBy") String lastCheckedOutBy, Callback<BookResponse> cb);
+
+    @FormUrlEncoded
+    @PUT("/books/{id}")
+    BookResponse updateOneBook(@Path("id") long bookID, @Field("lastCheckedOut") Date lastCheckedOut, @Field("lastCheckedOutBy") String lastCheckedOutBy);
 }

@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -13,11 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 public class BookListActivity extends ActionBarActivity implements BookListFragment.OnListItemClickedListener {
@@ -26,7 +19,6 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     private static final String BROADCAST_ACTION = "UPDATE_UI";
     private static final String BOOK_ID="BOOK_ID";
 
-    private LibraryClient mLibraryClient = null;
     private ProgressBar mBookListProgressBar = null;
 
     @Override
@@ -34,20 +26,18 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
         mBookListProgressBar = (ProgressBar)findViewById(R.id.bookListProcessBar);
-
-        mLibraryClient = APIClient.getInstance().getClient(getApplicationContext(), LibraryClient.class);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalBroadcastReceiver,new IntentFilter(BROADCAST_ACTION));
-        if(!networkConnected()) {
-            Toast.makeText(this,getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
+
+        BookListFragment bookListFragment = (BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
+        if(bookListFragment!=null) {
+            bookListFragment.getBookList();
         }
-        else {
-            getBookList();
-        }
+
     }
 
     @Override
@@ -92,29 +82,15 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(BROADCAST_ACTION)) {
-                getBookList();
+                BookListFragment bookListFragment = (BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment);
+                if(bookListFragment!=null) {
+                    bookListFragment.getBookList();
+                }
             }
         }
     };
 
-    private void getBookList() {
-        mBookListProgressBar.setVisibility(View.VISIBLE);
-        mLibraryClient.getAllBooksAsync(new Callback<BookListResponse>() {
-            @Override
-            public void success(BookListResponse bookListResponse, Response response) {
-                BookListFragment bookListFragment = ((BookListFragment)getSupportFragmentManager().findFragmentById(R.id.booklistfragment));
-                if(bookListFragment!=null) {
-                    bookListFragment.updateUI(bookListResponse.getBooks());
-                    mBookListProgressBar.setVisibility(View.INVISIBLE);
-                }
-            }
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-            }
-        });
-    }
 
     @Override
     public void onListItemClicked(long bookID) {
@@ -123,9 +99,5 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         startActivity(intent);
     }
 
-    private boolean networkConnected() {
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return (activeNetwork!=null && activeNetwork.isConnected());
-    }
+
 }

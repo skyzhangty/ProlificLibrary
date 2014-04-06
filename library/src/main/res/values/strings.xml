@@ -27,4 +27,7 @@
     <string name="tags_detail">Tags: </string>
     <string name="publisher_detail">Publisher: </string>
     <string name="checkedout_detail">Last Checked Out By:</string>
+    <string name="checkout_name">Your Name</string>
+    <string name="enter_name">Please enter your name</string>
+    <string name="cancel">Cancel</string>
 </resources>

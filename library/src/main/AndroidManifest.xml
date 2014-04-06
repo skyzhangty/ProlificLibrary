@@ -31,7 +31,7 @@
 
         <activity
             android:name="com.raymondtz65.prolificlibrary.library.BookDetailActivity"
-            android:label="@string/title_activity_book_detail" >
+            android:label="@string/detail" >
         </activity>
     </application>
 

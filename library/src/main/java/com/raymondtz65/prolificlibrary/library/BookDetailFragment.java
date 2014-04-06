@@ -1,15 +1,19 @@
 package com.raymondtz65.prolificlibrary.library;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,7 @@ public class BookDetailFragment extends Fragment {
     TextView mLastCheckedOutTextView = null;
     Button mCheckedOutButton = null;
 
+    private Book mBook = null;
 
     public static BookDetailFragment newInstance() {
         BookDetailFragment fragment = new BookDetailFragment();
@@ -57,6 +62,52 @@ public class BookDetailFragment extends Fragment {
         mPublisherTextView = (TextView)view.findViewById(R.id.publisherTextView);
         mLastCheckedOutTextView = (TextView)view.findViewById(R.id.lastCheckedOutTextView);
         mCheckedOutButton = (Button)view.findViewById(R.id.checkoutButton);
+
+        mCheckedOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                final View alertDialogView = getActivity().getLayoutInflater().inflate(R.layout.checkout_dialog, null);
+                alertDialogBuilder.setMessage(getResources().getString(R.string.enter_name));
+                alertDialogBuilder.setCancelable(true);
+                alertDialogBuilder.setView(alertDialogView);
+                alertDialogBuilder.setPositiveButton(getResources().getString(R.string.check_out),new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String lastCheckedOutBy = ((EditText)alertDialogView.findViewById(R.id.checkoutNameEditText)).getText().toString();
+                        if(!networkConnected()) {
+                            Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
+                        }
+                        else if(lastCheckedOutBy!=null && !TextUtils.isEmpty(lastCheckedOutBy)) {
+                            LibraryClient libraryClient = APIClient.getInstance().getClient(getActivity().getApplicationContext(),LibraryClient.class);
+                            libraryClient.updateOneBookAsync(mBook.getId(),new Date(),lastCheckedOutBy, new Callback<BookResponse>() {
+                                @Override
+                                public void success(BookResponse bookResponse, Response response) {
+                                    mBook=bookResponse.getBook();
+                                    if(mBook!=null) {
+                                        showBookDetail(mBook.getId());
+                                    }
+                                }
+
+                                @Override
+                                public void failure(RetrofitError retrofitError) {
+                                    Toast.makeText(getActivity().getApplicationContext(),retrofitError.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(getResources().getString(R.string.cancel),new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+
         return view;
     }
 
@@ -84,9 +135,9 @@ public class BookDetailFragment extends Fragment {
             libraryClient.getOneBookAsync(bookID, new Callback<BookResponse>() {
                 @Override
                 public void success(BookResponse bookResponse, Response response) {
-                    Book book = bookResponse.getBook();
-                    if(book!=null) {
-                        updateUI(book);
+                    mBook = bookResponse.getBook();
+                    if(mBook!=null) {
+                        updateUI(mBook);
                     }
                 }
 
@@ -115,7 +166,7 @@ public class BookDetailFragment extends Fragment {
 
         if(lastCheckedOut!=null && lastCheckedOutBy!=null) {
             String formattedDate = new SimpleDateFormat("MMMM d,yyyy h:m a").format(lastCheckedOut);
-            mLastCheckedOutTextView.setText(getResources().getString(R.string.checkedout_detail)+"\n"+lastCheckedOut+" @ "+formattedDate);
+            mLastCheckedOutTextView.setText(getResources().getString(R.string.checkedout_detail)+"\n"+lastCheckedOutBy+" @ "+formattedDate);
         }
 
     }
