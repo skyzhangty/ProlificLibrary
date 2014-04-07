@@ -34,6 +34,7 @@ public interface LibraryClient {
     BookListResponse getAllBooks(@Query("sort")String sort);
 
 
+    @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("/books")
     void addOneBookAsync(@Field("author") String author, @Field("categories") String categories, @Field("lastCheckedOut") Date lastCheckedOut,
@@ -41,22 +42,26 @@ public interface LibraryClient {
                     Callback<BookResponse> cb);
 
 
-
+    @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("/books")
     BookResponse addOneBook(@Field("author") String author, @Field("categories") String categories, @Field("lastCheckedOut") Date lastCheckedOut,
                          @Field("lastCheckedOutBy") String lastCheckedOutBy, @Field("publisher") String publisher, @Field("title") String title);
 
+    @Headers("Accept: application/json")
     @GET("/books/{id}")
     void getOneBookAsync(@Path("id") long bookID, Callback<BookResponse> cb);
 
+    @Headers("Accept: application/json")
     @GET("/books/{id}")
     BookResponse getOneBook(@Path("id") long bookID);
 
+    @Headers("Accept: application/json")
     @FormUrlEncoded
     @PUT("/books/{id}")
     void updateOneBookAsync(@Path("id") long bookID, @Field("lastCheckedOut") Date lastCheckedOut, @Field("lastCheckedOutBy") String lastCheckedOutBy, Callback<BookResponse> cb);
 
+    @Headers("Accept: application/json")
     @FormUrlEncoded
     @PUT("/books/{id}")
     BookResponse updateOneBook(@Path("id") long bookID, @Field("lastCheckedOut") Date lastCheckedOut, @Field("lastCheckedOutBy") String lastCheckedOutBy);
