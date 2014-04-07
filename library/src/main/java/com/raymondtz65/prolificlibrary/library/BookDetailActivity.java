@@ -68,7 +68,9 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT,sharedStr);
-        mShareActionProvider.setShareIntent(intent);
+        if(mShareActionProvider!=null) {
+            mShareActionProvider.setShareIntent(intent);
+        }
     }
 
     @Override
