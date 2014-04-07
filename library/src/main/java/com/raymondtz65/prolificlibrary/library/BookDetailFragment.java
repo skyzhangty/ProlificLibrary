@@ -188,7 +188,7 @@ public class BookDetailFragment extends Fragment {
         mLastCheckedOutTextView.setText(getResources().getString(R.string.checkedout_detail));
 
         if(lastCheckedOut!=null && lastCheckedOutBy!=null) {
-            String formattedDate = new SimpleDateFormat("MMMM d,yyyy h:m a").format(lastCheckedOut);
+            String formattedDate = new SimpleDateFormat("MMMM d, yyyy h:m a").format(lastCheckedOut);
             mLastCheckedOutTextView.setText(getResources().getString(R.string.checkedout_detail)+"\n"+lastCheckedOutBy+" @ "+formattedDate);
         }
 
