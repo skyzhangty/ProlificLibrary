@@ -7,12 +7,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 
-public class BookDetailActivity extends ActionBarActivity implements BookDetailFragment.OnBookUpdated{
+public class BookDetailActivity extends ActionBarActivity implements BookDetailFragment.BookDetailListener{
 
     private static final String BOOK_ID="BOOK_ID";
     private ShareActionProvider mShareActionProvider = null;
+
+    private Menu mMenu = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
         // Inflate the menu; this adds items to the action bar if it is present.
 
         getMenuInflater().inflate(R.menu.book_detail, menu);
+        mMenu = menu;
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.action_share));
 
 
@@ -64,5 +69,32 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT,sharedStr);
         mShareActionProvider.setShareIntent(intent);
+    }
+
+    @Override
+    public void onStartCheckingOut() {
+        enableUI(false);
+    }
+
+    @Override
+    public void onFinishCheckingOut() {
+        enableUI(true);
+    }
+
+    private void enableUI(boolean enabled) {
+        //Enable/Disable all UI controls
+
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.bookdetailactivity);
+        for(int i=0;i<linearLayout.getChildCount();i++) {
+            View view = linearLayout.getChildAt(i);
+            view.setEnabled(enabled);
+        }
+
+        //Enable/Disable Menu Items
+        if(mMenu!=null) {
+            for (int i = 0; i < mMenu.size(); i++) {
+                mMenu.getItem(i).setEnabled(enabled);
+            }
+        }
     }
 }

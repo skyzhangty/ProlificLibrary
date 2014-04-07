@@ -7,10 +7,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 
-public class AddBookActivity extends ActionBarActivity {
+public class AddBookActivity extends ActionBarActivity implements AddBookFragment.AddBookListener{
 
+    private Menu mMenu = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,7 @@ public class AddBookActivity extends ActionBarActivity {
         
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_book, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -75,6 +79,33 @@ public class AddBookActivity extends ActionBarActivity {
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
+        }
+    }
+
+    @Override
+    public void onStartAdding() {
+        enableUI(false);
+    }
+
+    @Override
+    public void onFinishAdding() {
+        enableUI(true);
+    }
+
+    private void enableUI(boolean enabled) {
+        //Enable/Disable all UI controls
+
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.addbookactivity);
+        for(int i=0;i<linearLayout.getChildCount();i++) {
+            View view = linearLayout.getChildAt(i);
+            view.setEnabled(enabled);
+        }
+
+        //Enable/Disable Menu Items
+        if(mMenu!=null) {
+            for (int i = 0; i < mMenu.size(); i++) {
+                mMenu.getItem(i).setEnabled(enabled);
+            }
         }
     }
 }

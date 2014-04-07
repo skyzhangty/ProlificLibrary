@@ -10,18 +10,22 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
-public class BookListActivity extends ActionBarActivity implements BookListFragment.OnListItemClickedListener {
+public class BookListActivity extends ActionBarActivity implements BookListFragment.BookListListener {
 
     private static final String SEED_ACTION = "SEED";
     private static final String BROADCAST_ACTION = "UPDATE_UI";
     private static final String BOOK_ID="BOOK_ID";
     private static final String SEED_STATUS = "SEED_STATUS";
 
+    private Menu mMenu = null;
     private BookListFragment mBookListFragment = null;
+
+    private boolean mUIEnabled = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +50,18 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.book_list, menu);
-
+        mMenu = menu;
+        if(!mUIEnabled) {
+            for(int i=0;i<menu.size();i++) {
+                menu.getItem(i).setEnabled(false);
+            }
+        }
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,6 +75,7 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
             return true;
         }
         else if(id==R.id.action_seed) {
+            enableUI(false);
             ((ProgressBar)mBookListFragment.getActivity().findViewById(R.id.bookListProcessBar)).setVisibility(View.VISIBLE);
             Intent intent = new Intent(this, BackgroundService.class);
             intent.setAction(SEED_ACTION);
@@ -101,5 +114,27 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
         startActivity(intent);
     }
 
+    public void onStartRefreshingList() {
+        enableUI(false);
+    }
+    public void onFinishRefreshingList() {
+        enableUI(true);
+    }
 
+    private void enableUI(boolean enabled) {
+        //Enable/Disable all UI controls
+        mUIEnabled = enabled;
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.booklistactivity);
+        for(int i=0;i<linearLayout.getChildCount();i++) {
+            View view = linearLayout.getChildAt(i);
+            view.setEnabled(enabled);
+        }
+
+        //Enable/Disable Menu Items
+        if(mMenu!=null) {
+            for (int i = 0; i < mMenu.size(); i++) {
+                mMenu.getItem(i).setEnabled(enabled);
+            }
+        }
+    }
 }

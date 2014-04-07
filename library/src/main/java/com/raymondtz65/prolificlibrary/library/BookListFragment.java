@@ -26,7 +26,7 @@ import retrofit.client.Response;
 public class BookListFragment extends Fragment {
 
 
-    private OnListItemClickedListener mListener;
+    private BookListListener mListener;
 
     private List<Book> mBookList = new ArrayList<Book>();
     private ListView mListView = null;
@@ -81,7 +81,7 @@ public class BookListFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnListItemClickedListener) activity;
+            mListener = (BookListListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -101,12 +101,14 @@ public class BookListFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.no_network), Toast.LENGTH_LONG).show();
         }
         else {
+            mListener.onStartRefreshingList();   //Disable all UI controls and menu items
             LibraryClient libraryClient = APIClient.getInstance().getClient(getActivity().getApplicationContext(),LibraryClient.class);
             libraryClient.getAllBooksAsync(new Callback<BookListResponse>() {
                 @Override
                 public void success(BookListResponse bookListResponse, Response response) {
                     updateUI(bookListResponse.getBooks());
                     mProgressBar.setVisibility(View.INVISIBLE);
+                    mListener.onFinishRefreshingList();   //Enable all UI controls and menu items
 
                 }
 
@@ -145,9 +147,11 @@ public class BookListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListItemClickedListener {
-        // TODO: Update argument type and name
+    public interface BookListListener {
+
         public void onListItemClicked(long bookID);
+        public void onStartRefreshingList();
+        public void onFinishRefreshingList();
     }
 
 }

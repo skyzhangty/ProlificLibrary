@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import retrofit.Callback;
@@ -23,13 +24,16 @@ import retrofit.client.Response;
 
 public class AddBookFragment extends Fragment {
 
-    private EditText mBookTitleEditText;
-    private EditText mAuthorEditText;
-    private EditText mPublisherEditText;
-    private EditText mCategoriesEditText;
-    private Button mSubmitButton;
+    private EditText mBookTitleEditText=null;
+    private EditText mAuthorEditText=null;
+    private EditText mPublisherEditText=null;
+    private EditText mCategoriesEditText=null;
+    private Button mSubmitButton=null;
 
-    public static AddBookFragment newInstance(String param1, String param2) {
+    private ProgressBar mProgressBar = null;
+
+    private AddBookListener mListener = null;
+    public static AddBookFragment newInstance() {
         AddBookFragment fragment = new AddBookFragment();
 
         return fragment;
@@ -53,6 +57,8 @@ public class AddBookFragment extends Fragment {
         mAuthorEditText = (EditText)view.findViewById(R.id.authorEditText);
         mPublisherEditText = (EditText)view.findViewById(R.id.publisherEditText);
         mCategoriesEditText = (EditText)view.findViewById(R.id.categoriesEditText);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.addbookProcessBar);
+
         mSubmitButton = (Button)view.findViewById(R.id.submitBtn);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +87,8 @@ public class AddBookFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.no_network),Toast.LENGTH_LONG).show();
                 }
                 else {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mListener.onStartAdding();
                     libraryClient.addOneBookAsync(author, categories, null, null, publisher, title,
                         new Callback<BookResponse>() {
                             @Override
@@ -90,12 +98,16 @@ public class AddBookFragment extends Fragment {
                                 mPublisherEditText.setText("");
                                 mCategoriesEditText.setText("");
                                 mBookTitleEditText.requestFocus();
-                                Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.addbooksucess),Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.addbooksucess), Toast.LENGTH_LONG).show();
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                                mListener.onFinishAdding();
                             }
 
                             @Override
                             public void failure(RetrofitError retrofitError) {
                                 Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.addbookfail), Toast.LENGTH_LONG).show();
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                                mListener.onFinishAdding();
                             }
                         }
                     );
@@ -109,12 +121,21 @@ public class AddBookFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
+
         super.onAttach(activity);
+        try {
+            mListener = (AddBookListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
+
         super.onDetach();
+        mListener = null;
     }
 
 
@@ -135,4 +156,8 @@ public class AddBookFragment extends Fragment {
         return (activeNetwork!=null && activeNetwork.isConnected());
     }
 
+    interface AddBookListener {
+        public void onStartAdding();
+        public void onFinishAdding();
+    }
 }

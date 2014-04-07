@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,7 +6,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.raymondtz65.prolificlibrary.library.AddBookActivity">
+    tools:context="com.raymondtz65.prolificlibrary.library.AddBookActivity"
+    android:id="@+id/addbookactivity"
+    android:orientation="vertical">
 
    <fragment
        android:name="com.raymondtz65.prolificlibrary.library.AddBookFragment"
@@ -15,4 +17,4 @@
        android:id="@+id/addbookfragment"
       />
 
-</RelativeLayout>
+</LinearLayout>
