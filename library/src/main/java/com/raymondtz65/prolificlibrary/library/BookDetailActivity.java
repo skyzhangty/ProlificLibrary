@@ -17,6 +17,7 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
     private ShareActionProvider mShareActionProvider = null;
 
     private Menu mMenu = null;
+    private long mBookID=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +26,17 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        BookDetailFragment bookDetailFragment = (BookDetailFragment)getSupportFragmentManager().findFragmentById(R.id.bookdetailfragment);
-        if(bookDetailFragment!=null) {
-            bookDetailFragment.showBookDetail(intent.getLongExtra(BOOK_ID,0));
-        }
-
-
+        mBookID = intent.getLongExtra(BOOK_ID,0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BookDetailFragment bookDetailFragment = (BookDetailFragment)getSupportFragmentManager().findFragmentById(R.id.bookdetailfragment);
+        if(bookDetailFragment!=null) {
+            bookDetailFragment.showBookDetail(mBookID);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
