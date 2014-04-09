@@ -8,7 +8,7 @@ import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
 
 public class BookDetailActivity extends ActionBarActivity implements BookDetailFragment.BookDetailListener{
@@ -90,17 +90,25 @@ public class BookDetailActivity extends ActionBarActivity implements BookDetailF
     private void enableUI(boolean enabled) {
         //Enable/Disable all UI controls
 
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.bookdetailactivity);
-        for(int i=0;i<linearLayout.getChildCount();i++) {
-            View view = linearLayout.getChildAt(i);
-            view.setEnabled(enabled);
-        }
+        BookDetailFragment bookDetailFragment = (BookDetailFragment)getSupportFragmentManager().findFragmentById(R.id.bookdetailfragment);
+        enableView(bookDetailFragment.getView(),enabled);
 
         //Enable/Disable Menu Items
         if(mMenu!=null) {
             for (int i = 0; i < mMenu.size(); i++) {
                 mMenu.getItem(i).setEnabled(enabled);
             }
+        }
+    }
+
+    private void enableView(View view, boolean enabled) {
+        if(view instanceof ViewGroup) {
+            for(int i=0;i<((ViewGroup) view).getChildCount();i++) {
+                enableView(((ViewGroup) view).getChildAt(i),enabled);
+            }
+        }
+        else {
+            view.setEnabled(enabled);
         }
     }
 }

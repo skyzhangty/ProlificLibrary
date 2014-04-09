@@ -10,7 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -124,17 +124,24 @@ public class BookListActivity extends ActionBarActivity implements BookListFragm
     private void enableUI(boolean enabled) {
         //Enable/Disable all UI controls
         mUIEnabled = enabled;
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.booklistactivity);
-        for(int i=0;i<linearLayout.getChildCount();i++) {
-            View view = linearLayout.getChildAt(i);
-            view.setEnabled(enabled);
-        }
+        enableView(mBookListFragment.getView(),enabled);
 
         //Enable/Disable Menu Items
         if(mMenu!=null) {
             for (int i = 0; i < mMenu.size(); i++) {
                 mMenu.getItem(i).setEnabled(enabled);
             }
+        }
+    }
+
+    private void enableView(View view, boolean enabled) {
+        if(view instanceof ViewGroup) {
+            for(int i=0;i<((ViewGroup) view).getChildCount();i++) {
+                enableView(((ViewGroup) view).getChildAt(i), enabled);
+            }
+        }
+        else {
+            view.setEnabled(enabled);
         }
     }
 }

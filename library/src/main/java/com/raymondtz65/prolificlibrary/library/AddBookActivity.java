@@ -8,7 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
 
 public class AddBookActivity extends ActionBarActivity implements AddBookFragment.AddBookListener{
@@ -95,17 +95,25 @@ public class AddBookActivity extends ActionBarActivity implements AddBookFragmen
     private void enableUI(boolean enabled) {
         //Enable/Disable all UI controls
 
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.addbookactivity);
-        for(int i=0;i<linearLayout.getChildCount();i++) {
-            View view = linearLayout.getChildAt(i);
-            view.setEnabled(enabled);
-        }
+        AddBookFragment addBookFragment = (AddBookFragment) getSupportFragmentManager().findFragmentById(R.id.addbookfragment);
+        enableView(addBookFragment.getView(),enabled);
 
         //Enable/Disable Menu Items
         if(mMenu!=null) {
             for (int i = 0; i < mMenu.size(); i++) {
                 mMenu.getItem(i).setEnabled(enabled);
             }
+        }
+    }
+
+    private void enableView(View view, boolean enabled) {
+        if(view instanceof ViewGroup) {
+            for(int i=0;i<((ViewGroup) view).getChildCount();i++) {
+                enableView(((ViewGroup) view).getChildAt(i), enabled);
+            }
+        }
+        else {
+            view.setEnabled(enabled);
         }
     }
 }
